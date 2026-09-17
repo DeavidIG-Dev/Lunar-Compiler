@@ -10,6 +10,8 @@ package lunar.tokenization.tokens
  * Ejemplo:
  * ```Text
  * SoyUnTexto -> NamedToken(/* type= */ TokenType.IdentifierToken, /* start= */ 0, /* end= */ 10)
+ * ^^^^^^^^^^
+ * 0        10
  * ```
  * En el ´SoyUnTexto´ se necesita saber esos datos, para poder guardar datos importantes.
  * Y si no se guardaba no se podria saber lo que contiene el propio ´SoyUnTexto´, ya que puede ser un ´NoSoyUnTexto´ o cualquier dato
