@@ -1,9 +1,9 @@
 package lunar.tokenization.tokens
 
 /**
- * # [NamedToken]
+ * # [TextToken]
  *
- * La clase [NamedToken] es la encargada de transformar el Texto crudo a datos usable para él [Parser].
+ * La clase [TextToken] es la encargada de transformar el Texto crudo a datos usable para él [Parser].
  * Puede guardar el tipo asociado, posición inimical, como la posición final; para poder usarlo del propio [Parser]
  *
  * A diferencia del [SymbolToken], se guarda las posiciones iniciales y finales, para poder saber qu contiene el propio dato dentro del archivo.
@@ -27,4 +27,4 @@ package lunar.tokenization.tokens
  * @param [kotlin.Int] end: Para obtener la posición final de donde termina el dato/texto.
  * @author DeavidIG, DeanielIG
  */
-data class NamedToken(override val type: Int = TokenType.IdentifierToken, val start: Int, val end: Int) : Token
+data class TextToken(override val type: Int = TokenType.IdentifierToken, val start: Int, val end: Int) : Token

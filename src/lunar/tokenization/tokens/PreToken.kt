@@ -9,5 +9,15 @@ object PreToken {
 	 *
 	 * @return [SymbolToken]
 	 */
-	val StartOfFileToken = SymbolToken(-1)
+	val StartOfFileToken = SymbolToken(TokenType.StartOfFileToken /* -> 0 */)
+
+	/**
+	 * # [EndOfFileToken]
+	 *
+	 * La variable [EndOfFileToken], es un pre-construido para evitar la sobrecarga o sobre esfuerzo del CPU para reprocesar el mismo dato.
+	 * Es decir, reutilizar una sola instancia general.
+	 *
+	 * @return [SymbolToken]
+	 */
+	val EndOfFileToken = SymbolToken(TokenType.EndOfFileToken /* -> 1 */)
 }

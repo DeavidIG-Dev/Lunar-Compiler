@@ -22,7 +22,7 @@ object TokenType {
 	/**
 	 * # [IdentifierToken]
 	 *
-	 * La variable [IdentifierToken] es para especificar cuando se encontró un nombre que no es una Palabra clase del propio lenguaje de Programación, ejemplo.
+	 * La variable [IdentifierToken] es para especificar cuando se encontró un nombre que no es una Palabra clave del propio Lenguaje de Programación, ejemplo.
 	 * ```Text
 	 * Hello -> NammedToken(/* type= */ TokenType.IdentifierToken, /* start= */ 0, /* end= */ 5)
 	 * ```
@@ -30,4 +30,16 @@ object TokenType {
 	 * @return [Int] = 2
 	 */
 	const val IdentifierToken: Int = 2
+
+	/**
+	 * # [NumberLiteralTypeToken]
+	 *
+	 * La variable [NumberLiteralTypeToken] es para especificar cuando se encontró un número y que no es una Palabra clave del propio Lenguaje de Programación, ejemplo.
+	 * ```Text
+	 * 78540 -> NumericToken(/* type= */ TokenType.NumberLiteralTypeToken, /* start= */ 0, /* end= */ 5)
+	 * ```
+	 *
+	 * @return [Int] = 2
+	 */
+	const val NumberLiteralTypeToken = 10
 }
