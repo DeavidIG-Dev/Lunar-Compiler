@@ -12,4 +12,5 @@ fun main() {
 	}
 
 	println("Last Token: " + lexer.token)
+
 }
