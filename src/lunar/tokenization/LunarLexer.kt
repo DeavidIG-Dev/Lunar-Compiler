@@ -5,6 +5,7 @@ import lunar.tokenization.tokens.TextToken
 import lunar.tokenization.tokens.PreToken
 import lunar.tokenization.tokens.Token
 import lunar.tokenization.tokens.SymbolToken
+import lunar.tokenization.utils.LexerError
 
 /**
  * # [LunarLexer]
@@ -13,12 +14,12 @@ import lunar.tokenization.tokens.SymbolToken
  *
  * La clase está marcada como `abstract` para dar comiendo a la documentacion y explicacion de la propia clase y sus metodos.
  *
- * @param kotlin.CharArray input: Variable especializada para guarda los datos que recibió del Archivo
+ * @param input [kotlin.CharArray]: Variable especializada para guarda los datos que recibió del Archivo
  * @constructor Construye una Instancia del Propio Lexer y poder procesar los datos crudos
  * @author DeavidIG, DeanielIG
  * @since 1.0
  */
-abstract class LunarLexer(private val input: CharArray) {
+public class LunarLexer(private val input: CharArray) {
 	/**
 	 * # [token]
 	 *
@@ -38,8 +39,7 @@ abstract class LunarLexer(private val input: CharArray) {
 	 * }
 	 * ```
 	 *
-	 * Lo que si no se pueda hacer, es tartar de cambiar su estado desde afuera. Ya que su estado `set` (o `setter`) está marcado como `private`.
-	 * Por lo cual, lo siguiente no se puede "validar".
+	 * Lo que si no se pueda hacer, es tartar de cambiar su estado desde afuera. Ya que su estado `set` (o `setter`) está marcado como `private`, por lo cual, lo siguiente no se puede "validar".
 	 * ```Kotlin
 	 * // Usando la clase TextToken.
 	 * lexerInstance.token = TextToken(/* type= */ TokenType.IdentifierToken, /* start= */ 0, /* end= */ 5);
@@ -55,7 +55,7 @@ abstract class LunarLexer(private val input: CharArray) {
 	 * @author DeavidIG, DeanielIG
 	 * @since 1.0
 	 */
-	/* abstract */ var token: Token = PreToken.StartOfFileToken // -> = UnnamedToken(-1)
+	public /* abstract */ var token: Token = PreToken.StartOfFileToken // -> = UnnamedToken(-1)
 		private set
 
 	/**
@@ -98,7 +98,8 @@ abstract class LunarLexer(private val input: CharArray) {
 	 * @author DeavidIG, DeanielIG
 	 * @since 1.0
 	 */
-	/* private */ abstract fun getSymbolToken(): SymbolToken // -> Token
+	private fun getSymbolToken(): SymbolToken /* -> Token */ = LexerError.setErrorLexer(type = LexerError.LexerTypeError.CharacterNotMatcher, position = position, text = "El símbolo que se encontró no es valido para el Lexer.")
+
 
 	/**
 	 * # [getIdentifierToken]
@@ -106,11 +107,16 @@ abstract class LunarLexer(private val input: CharArray) {
 	 * <Missing Documentation Implementation>
 	 *
 	 * @return [TextToken]
-	 * @param kotlin.Int oldPosition: parámetro encargar de guardar la posición de donde se inicio
+	 * @param oldPosition [kotlin.Int]: parámetro encargar de guardar la posición de donde se inicio
 	 * @author DeavidIG, DeanielIG
 	 * @since 1.0
 	 */
-	/* private */ abstract fun getIdentifierToken(oldPosition: Int): TextToken // -> Token
+	private fun getIdentifierToken(oldPosition: Int): TextToken /* -> Token */ {
+		while (position < input.size && ((input[position] >= 'a' && 'z' >= input[position]) || (input[position] >= 'A' && 'Z' >= input[position]) || (input[position] >= '0' && '9' >= input[position]) || input[position] == '_' || input[position] == '$')) {
+			position++
+		}
+		return TextToken(/* type = TokenType.IdentifierToken , */ start = oldPosition, end = position)
+	}
 
 	/**
 	 * # [getNumericsToken]
@@ -118,32 +124,65 @@ abstract class LunarLexer(private val input: CharArray) {
 	 * <Missing Documentation Implementation>
 	 *
 	 * @return [TextToken]
-	 * @param kotlin.Int oldPosition: parámetro encargar de guardar la posición de donde se inicio
+	 * @param oldPosition [kotlin.Int]: parámetro encargar de guardar la posición de donde se inicio
 	 * @author DeavidIG, DeanielIG
 	 * @since 1.0
 	 */
-	/* private */ abstract fun getNumericsToken(oldPosition: Int): NumericToken // -> Token
+	private fun getNumericsToken(oldPosition: Int): NumericToken /* -> Token */ {
+		while (position < input.size && ((input[position] >= '0' && '9' >= input[position]) || input[position] == '_')) { // recorder dígitos hasta encontrar el límite o ya no hat dígitos
+			position++
+		}
+		if (position < input.size && input[position] == '.') { // Validador para saber si va a ser punto decimal y si está dentro de los límites
+			position++
+
+			if (!(position < input.size && (input[position] >= '0' && '9' >= input[position]))) { // Verificamos si no hay digito, para retornar error y si no está dentro de los límites
+				LexerError.setErrorLexer(type = LexerError.LexerTypeError.CharacterNotMatcher, position = position, text = "No hay digito después del punto decimal, por favor ingresa un digito")
+			}
+			position++
+
+			while (position < input.size && ((input[position] >= '0' && '9' >= input[position]) || input[position] == '_')) { // recorder dígitos hasta encontrar el límite o ya no hat dígitos
+				position++
+			}
+		}
+		return NumericToken(/* type = TokenType.NumberLiteralTypeToken , */ start = oldPosition, end = position)
+	}
+
 
 	/**
 	 * # [setNextToken]
 	 *
 	 * La función [setNextToken] es la encargada de poder procesar los textos a crudos a datos, para que él [Parser] pueda usar.
+	 *
 	 * Asi mismo, es el encargado de optimizar y hacer eficiente los datos que recibió por parte del Archivo.
 	 *
 	 * ## Algoritmos
 	 * Los algoritmos que se usa es de forma Secuencial (O(n)) para procesar los datos para predecir y determinar los datos que él [LunarLexer] recibió.
+	 *
 	 * No se usa otro tipo de Algoritmo no porque sae difícil de implementar, sino, porque puede retornar datos corruptos o frágiles a por consecuencia puede romper el propio Compilador.
 	 *
 	 * ## Implementación
 	 * Al implementar Secuancial (O(N)), puede hacer que los caracteres que leer puede ser más facil de entender. Sin tratar de estar determinando o prediciendo cada "instruccion".
+	 *
 	 * Aunque a veces no se hace el Algoritmo Secuancial (O(N)), ya que va a ver casos que puede ser del propio Constant Time O(1). Pero se usa el Secuancial, ya que está mayormente presente.
 	 *
 	 * @return [Unit]
 	 * @author DeavidIG, DeanielIG
 	 * @since 1.0
 	 */
-	fun setNextToken(): Unit /* -> Void */ {
+	public fun setNextToken(): Unit /* -> Void */ {
 		if (position >= input.size) { // Validador para saber si se terminó el archivo
+			token = PreToken.EndOfFileToken
+			return // Ya no hay archivo que procesar
+		}
+
+		if (input[position] == ' ') {
+			position++
+			while (position < input.size && input[position] == ' ') {
+				position++
+			}
+		}
+
+		if (position >= input.size) { // re validador para saber si se terminó el archivo
 			token = PreToken.EndOfFileToken
 			return // Ya no hay archivo que procesar
 		}
@@ -161,5 +200,7 @@ abstract class LunarLexer(private val input: CharArray) {
 			token = getNumericsToken(oldPosition)
 			return // texto que fue transformado
 		} // Por si no es un Dígito
+
+		token = getSymbolToken()
 	}
 }

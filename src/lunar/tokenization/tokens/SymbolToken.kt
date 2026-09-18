@@ -8,7 +8,7 @@ package lunar.tokenization.tokens
  *
  * @since 1.0
  * @constructor Constructor para crear uns Instancia del Símbolo del Texto, guarda de donde comienza o donde terminar.
- * @param [kotlin.Int]: type - Para obtener el tipo asociado del Símbolo.
+ * @param type [kotlin.Int] - Para obtener el tipo asociado del Símbolo.
  * @author DeavidIG, DeanielIG
  */
 data class SymbolToken(override val type: Int) : Token

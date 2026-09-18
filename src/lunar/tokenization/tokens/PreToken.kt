@@ -10,7 +10,6 @@ object PreToken {
 	 * @return [SymbolToken]
 	 */
 	val StartOfFileToken = SymbolToken(TokenType.StartOfFileToken /* -> 0 */)
-
 	/**
 	 * # [EndOfFileToken]
 	 *

@@ -39,7 +39,7 @@ object TokenType {
 	 * 78540 -> NumericToken(/* type= */ TokenType.NumberLiteralTypeToken, /* start= */ 0, /* end= */ 5)
 	 * ```
 	 *
-	 * @return [Int] = 2
+	 * @return [Int] =
 	 */
 	const val NumberLiteralTypeToken = 10
 }
