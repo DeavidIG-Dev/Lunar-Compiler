@@ -3,9 +3,13 @@ package lunar.tokenization.tokens
 /**
  * # [Token]
  *
- * <Missing Documentation Implementation>
+ * <Missing Documentation implementation>
  *
  * @author DeavidIG, DeanielIG
+ * @see NumericToken
+ * @see PreToken
+ * @see SymbolToken
+ * @see TextToken
  * @since 1.2
  */
-interface Token { val type: Int }
+sealed interface Token { val type: Int }

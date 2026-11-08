@@ -1,11 +1,22 @@
 package lunar.tokenization.tokens
 
+import lunar.tokenization.LunarLexer
+
+/**
+ * # [PreToken]
+ *
+ * <Missing Documentation implementation>
+ *
+ * @see Parser
+ * @see LunarLexer
+ * @see SymbolToken
+ *
+ */
 object PreToken {
 	/**
 	 * # [StartOfFileToken]
 	 *
-	 * La variable [StartOfFileToken], es un pre-construido para evitar la sobrecarga o sobre esfuerzo del CPU para reprocesar el mismo dato.
-	 * Es decir, reutilizar una sola instancia general.
+	 * <Missing Documentation implementation>
 	 *
 	 * @return [SymbolToken]
 	 */
@@ -13,8 +24,7 @@ object PreToken {
 	/**
 	 * # [EndOfFileToken]
 	 *
-	 * La variable [EndOfFileToken], es un pre-construido para evitar la sobrecarga o sobre esfuerzo del CPU para reprocesar el mismo dato.
-	 * Es decir, reutilizar una sola instancia general.
+	 * <Missing Documentation implementation>
 	 *
 	 * @return [SymbolToken]
 	 */
